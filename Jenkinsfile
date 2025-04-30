@@ -12,8 +12,8 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/23Logesh/Microservice_B.git'
-            }
+        git branch: 'main', url: 'https://github.com/23Logesh/Microservice_A.git'
+    }
         }
 
         stage('Build') {
