@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'DOCKER_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
+    }
+
+    environment {
+        IMAGE_NAME = "23logesh/microservice_b:${params.DOCKER_TAG}"
+    }
+
+    stages {
+        stage('Docker Pull') {
+            steps {
+                script {
+                    // Remove the old image if it exists
+                    sh """
+                        docker images -q ${IMAGE_NAME} | xargs -r docker rmi || echo 'No old image to remove'
+                    """
+                    // Pull the new image
+                    sh "docker pull ${IMAGE_NAME}"
+                }
+            }
+        }
+
+        stage('Remove Old Container') {
+            steps {
+                script {
+                    // Stop and remove the existing container if it exists
+                    sh """
+                        docker ps -q -f name=microservice-b | xargs -r docker stop
+                        docker ps -a -q -f name=microservice-b | xargs -r docker rm
+                    """
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run the container in detached mode
+                    sh "docker run -d -p 8084:8084 --name microservice-b ${IMAGE_NAME}"
+                }
+            }
+        }
+
+        stage('Check Container') {
+            steps {
+                script {
+                    // Wait and check if the container is running
+                    sh 'docker ps -f name=microservice-b'
+                }
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                script {
+                    // Optionally stop the container after check (if needed)
+                    // sh 'docker stop microservice-b'
+                    echo 'Pipeline ends without stopping microservice-b'
+                }
+            }
+        }
+    }
+}
