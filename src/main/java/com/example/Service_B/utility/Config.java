@@ -7,22 +7,21 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class Config {
-	
-	private ModelMapper modelMapper;
-	
-	private RestTemplate restTemplate;
+
+    private ModelMapper modelMapper;
+
+    private RestTemplate restTemplate;
 
 
-	
-	@Bean
-	public ModelMapper getMapper() {
-		return new ModelMapper();
-	}
-	
-	@Bean
-	public RestTemplate geTemplate() {
-		return new RestTemplate();
-	}
+    @Bean
+    public ModelMapper getMapper() {
+        return new ModelMapper();
+    }
+
+    @Bean
+    public RestTemplate geTemplate() {
+        return new RestTemplate();
+    }
 
 
 }
