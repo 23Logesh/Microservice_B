@@ -54,13 +54,13 @@ public class ServiceImplServiceB implements ServiceInterServiceB {
 
     }
 
-    public ResponseStructure<String> sendBToA(Dto dto) {
+    public ResponseStructure<String> sendBToA(String message) {
         log.info("[ServiceB] Sending DtoB to ServiceA at /save endpoint.");
-        log.debug("[ServiceB] Payload: {}", dto);
+        log.debug("[ServiceB] Payload: {}", message);
 
         ResponseStructure<String> response = new ResponseStructure<>();
         try {
-            String result = restTemplate.postForEntity("http://localhost:8082/save", dto.getMessage(), String.class).getBody();
+            String result = restTemplate.postForEntity("http://localhost:8082/save", message, String.class).getBody();
             response.setStatus(200);
             response.setMessage("Successfully sent to Service A");
             response.setData(result);
