@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class ControllerServiceB {
     ServiceInterServiceB serviceInterServiceB;
     @Operation(summary = "Send Data to Service A using RestTemplate")
     @PostMapping("/sendBToA")
-    public ResponseStructure<String> sendBToA(@RequestBody Dto dto) {
-        return serviceInterServiceB.sendBToA(dto);
+    public ResponseStructure<String> sendBToA(@RequestParam String message) {
+        return serviceInterServiceB.sendBToA(message);
 
     }
     @Operation(summary = "To Check Data's Stored in the Service B DB ")
