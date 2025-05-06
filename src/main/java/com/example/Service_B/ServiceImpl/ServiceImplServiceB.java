@@ -61,7 +61,7 @@ public class ServiceImplServiceB implements ServiceInterServiceB {
         log.info("[ServiceB] Sending DtoB to ServiceA at /save/{message} endpoint.");
         log.debug("[ServiceB] Payload: {}", message);
 
-        String url = "http://localhost:8082/save/{message}";
+        String url = "http://microservice-a:8082/save/{message}";
 
         try {
             ResponseEntity<ResponseStructure<Dto>> response = restTemplate.exchange(
