@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,24 +57,30 @@ public class ServiceImplServiceB implements ServiceInterServiceB {
 
     }
 
-    public ResponseStructure<String> sendBToA(String message) {
-        log.info("[ServiceB] Sending DtoB to ServiceA at /save endpoint.");
+    public ResponseStructure<Dto> sendBToA(String message) {
+        log.info("[ServiceB] Sending DtoB to ServiceA at /save/{message} endpoint.");
         log.debug("[ServiceB] Payload: {}", message);
 
-        ResponseStructure<String> response = new ResponseStructure<>();
+        String url = "http://localhost:8082/save/{message}";
+
         try {
-            String result = restTemplate.postForEntity("microservice-a:28082/save", message, String.class).getBody();
-            response.setStatus(200);
-            response.setMessage("Successfully sent to Service A");
-            response.setData(result);
+            ResponseEntity<ResponseStructure<Dto>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    null,
+                    new ParameterizedTypeReference<ResponseStructure<Dto>>() {},
+                    message
+            );
+
+            return response.getBody();
         } catch (Exception e) {
             log.error("[ServiceB] Failed to send to ServiceA", e);
-            response.setStatus(502);
-            response.setMessage("Failed to call ServiceA: " + e.getMessage());
-            response.setData(null);
+            ResponseStructure<Dto> errorResponse = new ResponseStructure<>();
+            errorResponse.setStatus(502);
+            errorResponse.setMessage("Failed to call ServiceA: " + e.getMessage());
+            errorResponse.setData(null);
+            return errorResponse;
         }
-
-        return response;
     }
 
     @Override

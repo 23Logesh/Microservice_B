@@ -21,7 +21,7 @@ public class ControllerServiceB {
     ServiceInterServiceB serviceInterServiceB;
     @Operation(summary = "Send Data to Service A using RestTemplate")
     @PostMapping("/sendBToA")
-    public ResponseStructure<String> sendBToA(@RequestParam String message) {
+    public ResponseStructure<Dto>  sendBToA(@RequestParam String message) {
         return serviceInterServiceB.sendBToA(message);
 
     }
