@@ -9,7 +9,7 @@ public interface ServiceInterServiceB {
 
     public void saveB(String dtoB);
 
-    public ResponseStructure<String> sendBToA(String message);
+    public ResponseStructure<Dto>  sendBToA(String message);
 
     public ResponseStructure<List<Dto>> getAll();
 }
